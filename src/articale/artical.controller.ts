@@ -13,8 +13,7 @@ import {
 import { ArticalService } from './artical.service';
 import { CreateArticalDto } from './dto/create-artical.dto';
 import { UpdateArticalDto } from './dto/update-artical.dto';
-import { GenericFilter } from 'pagination/genericFilter';
-import { Artical } from './entities/artical.entity';
+import { PaginationQueryDto } from 'pagination/pagination';
 
 @Controller('/artical')
 export class ArticalController {
@@ -32,8 +31,8 @@ export class ArticalController {
   // return a list of articles for non-registed guests
   @HttpCode(200)
   @Get('/all')
-  async findAll(@Query() filter: GenericFilter & Artical) {
-    return await this.articalService.getArticals(filter);
+  async findAll(@Query() query: PaginationQueryDto) {
+    return await this.articalService.getArticals(query);
   }
   @HttpCode(200)
   @Get('/:id')

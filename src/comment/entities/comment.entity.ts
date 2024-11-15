@@ -1,22 +1,13 @@
 import { User } from 'src/user/entities/user.entity';
 import { Artical } from 'src/articale/entities/artical.entity';
-import {
-  Column,
-  CreateDateColumn,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 export class Comment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text')
-  content: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column({ nullable: false })
+  body: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })

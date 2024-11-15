@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -8,13 +16,12 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Post('/new-comment')
-  create(@Body() createCommentDto: CreateCommentDto) {
-    return this.commentService.create(createCommentDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.commentService.findAll();
+  create(
+    @Body() createCommentDto: CreateCommentDto,
+    @Body() userId: number,
+    @Body() articleId: number,
+  ) {
+    return this.commentService.create(userId, articleId, createCommentDto);
   }
 
   @Get(':id')

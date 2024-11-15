@@ -7,18 +7,17 @@ import {
 import { CreateArticalDto } from './dto/create-artical.dto';
 import { UpdateArticalDto } from './dto/update-artical.dto';
 import { Artical } from './entities/artical.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
-
+import { PaginationQueryDto } from 'pagination/pagination';
 
 @Injectable()
 export class ArticalService {
   constructor(
     @InjectRepository(Artical) private articalRepository: Repository<Artical>,
     @InjectRepository(User) private userRepository: Repository<User>,
-  ) {
-  }
+  ) {}
 
   async addNewArtical(userName: string, createArticalDto: CreateArticalDto) {
     const user: User = await this.userRepository.findOneBy({
@@ -49,11 +48,23 @@ export class ArticalService {
 
     return newArticle;
   }
+  // pagination service can return a nuber of pages in limit of 10 pages at most
+  async getArticals(query: PaginationQueryDto) {
+    const { page, limit = 10, search } = query;
+    const [items, count] = await this.articalRepository.findAndCount({
+      where: search ? { title: Like(`%${search}%`) } : {},
+      take: limit,
+      skip: (page - 1) * limit,
+      order: {},
+    });
 
-  async getArticals(): Promise<Artical[]> {
-  
+    return {
+      items,
+      total: count,
+      page,
+      limit,
+    };
   }
-
 
   async getArtical(id: number) {
     const articale: Artical = await this.articalRepository.findOneBy({
