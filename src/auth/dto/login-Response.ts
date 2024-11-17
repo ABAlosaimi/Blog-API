@@ -1,5 +1,3 @@
-export type LoginResponseDTO = {
-  email: string;
-  firstName: string;
-  lastName: string;
-};
+import { AccessToken } from '../types/AccessToken';
+
+export type LoginResponseDTO = AccessToken;

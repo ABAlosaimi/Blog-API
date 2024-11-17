@@ -42,7 +42,7 @@ export class ArticalService {
     const newArticle = this.articalRepository.create({
       body: createArticalDto.body,
       title: createArticalDto.title,
-      user: user,
+      user,
     });
     this.articalRepository.save(newArticle);
 

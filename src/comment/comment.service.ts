@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Artical } from 'src/articale/entities/artical.entity';
+import { Comment } from './entities/comment.entity';
 
 @Injectable()
 export class CommentService {
@@ -43,7 +44,6 @@ export class CommentService {
         'you have to say somting in your comment',
       );
     }
-
     const newComment = this.commentRepo.create({
       body: createCommentDto.body,
       user: user,

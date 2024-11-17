@@ -11,7 +11,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       usernameField: 'email',
     });
   }
-  // this method invloved to check if the userId passed can write an articale or not
+  // this function is used in the login process specifically in AuthGaurd
   async validate(email: string, password: string): Promise<User> {
     const user = await this.authService.validateUser(email, password);
     if (!user) {

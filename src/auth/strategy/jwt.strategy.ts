@@ -13,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: configService.get('JWT_SECRET'),
     });
   }
-  // the method below will return an accessTokenPaylod so, we can use for additional Verification
+
   async validate(payload: AccessTokenPayload) {
     return payload;
   }

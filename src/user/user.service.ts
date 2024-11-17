@@ -17,10 +17,6 @@ export class UserService {
     await this.uesrRepository.save(registerReqDto);
   }
 
-  async getUesr(email: string, password: string) {
-    const res = await this.authService.validateUser(email, password);
-    return res;
-  }
   // used by auth.service to get user object
   async getUserByEmail(email: string) {
     return await this.uesrRepository.findOneBy({ email: email });
@@ -35,7 +31,7 @@ export class UserService {
     return await this.uesrRepository.update(userName, updateUserDto);
   }
 
-  async remove(userName: string) {
-    await this.uesrRepository.delete(userName);
+  async remove(id: number) {
+    await this.uesrRepository.delete(id);
   }
 }

@@ -25,6 +25,12 @@ export class User {
   @Max(12)
   password: string;
 
+  @Column({ nullable: true })
+  follow: number;
+
+  @Column({ nullable: true })
+  followers: number;
+
   @OneToMany(() => Artical, (atical) => atical.user, {
     cascade: true,
     nullable: true,

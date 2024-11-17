@@ -9,7 +9,7 @@ import { RegisterRequestDto } from './dto/Register-Request.dto copy.js';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
 

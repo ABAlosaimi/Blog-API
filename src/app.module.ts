@@ -15,7 +15,7 @@ import { CommentModule } from './comment/comment.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: env.HOST,
-      port: env.APP_PORT,
+      port: parseInt(env.DB_PORT),
       username: env.USERNAME,
       password: env.PASSWORD,
       database: env.DATABASE,
