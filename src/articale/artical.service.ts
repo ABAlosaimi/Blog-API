@@ -46,7 +46,7 @@ export class ArticalService {
     });
     this.articalRepository.save(newArticle);
 
-    return newArticle;
+    return newArticle; // must be changed in production time
   }
   // pagination service can return a nuber of pages in limit of 10 pages at most
   async getArticals(query: PaginationQueryDto) {
@@ -55,7 +55,6 @@ export class ArticalService {
       where: search ? { title: Like(`%${search}%`) } : {},
       take: limit,
       skip: (page - 1) * limit,
-      order: {},
     });
 
     return {

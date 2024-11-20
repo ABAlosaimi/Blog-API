@@ -10,9 +10,9 @@ export const dataSourceOptions: DataSourceOptions = {
   password: '',
   database: 'Blog-db',
   entities: [__dirname + 'src/**/*.entity{.ts,.js}'],
-  synchronize: false, // todo: not safe for production and we should use migrations instead
+  synchronize: true, // todo: not safe for production and we should use migrations instead
   subscribers: [__dirname + '/domain/subscribers/*.subscriber{.ts,.js}'],
-  migrations: [__dirname + '/migrations/*{.ts,.js}'],
+  migrations: [__dirname + '/migration/*{.ts,.js}'],
 };
 
 const dataSource = new DataSource(dataSourceOptions);

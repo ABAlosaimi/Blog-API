@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArticalModule } from './articale/artical.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { env } from 'process';
@@ -14,15 +13,15 @@ import { CommentModule } from './comment/comment.module';
     ArticalModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: env.HOST,
-      port: parseInt(env.DB_PORT),
-      username: env.USERNAME,
-      password: env.PASSWORD,
-      database: env.DATABASE,
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: '',
+      database: 'Blog-db',
       autoLoadEntities: true,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
-      logging: false,
+      logging: true,
     }),
     UserModule,
     AuthModule,
@@ -31,6 +30,4 @@ import { CommentModule } from './comment/comment.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
-}
+export class AppModule {}

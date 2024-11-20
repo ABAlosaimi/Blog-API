@@ -8,40 +8,21 @@ import {
   Delete,
   UseGuards,
   HttpCode,
-  BadRequestException,
   Request,
+  Put,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { RegisterRequestDto } from 'src/auth/dto/Register-Request.dto copy';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from 'src/auth/auth.service';
-import { RegisterResponseDTO } from 'src/auth/dto/Register-Response.dto';
-import { LoginResponseDTO } from 'src/auth/dto/login-Response';
 import { Public } from 'src/decorators/public.decorator';
+import { FollowRequest } from './dto/follow-request.dto';
+import { PaginationQueryDto } from 'pagination/pagination';
+import { UnfollowRequest } from './dto/unfollow-request.dto';
 @Public()
 @Controller('/user')
 export class UserController {
-  constructor(
-    private userService: UserService,
-    private authService: AuthService,
-  ) {}
-
-  @Public()
-  @HttpCode(201)
-  @Post('/sign-in')
-  registerNewAcc(
-    @Body() registerReq: RegisterRequestDto,
-  ): Promise<RegisterResponseDTO | BadRequestException> {
-    return this.authService.register(registerReq);
-  }
-  @Public()
-  @HttpCode(200)
-  @UseGuards(AuthGuard('local'))
-  @Get('/login')
-  login(@Request() req): Promise<LoginResponseDTO | BadRequestException> {
-    return this.authService.login(req.user);
-  }
+  constructor(private userService: UserService) {}
 
   @HttpCode(201)
   @UseGuards(AuthGuard('jwt'))
@@ -58,5 +39,42 @@ export class UserController {
   @Delete('/delete/:id')
   remove(@Param('id') id: number) {
     return this.userService.remove(id);
+  }
+
+  // @UseGuards(AuthGuard('jwt'))
+  @Post('/follow')
+  async follow(@Body() followRequest: FollowRequest) {
+    // this.userService.follower(
+    //   followRequest.followedid,
+    //   followRequest.followerid,
+    // );
+    return await this.userService.follow(
+      followRequest.followerid,
+      followRequest.followedid,
+    );
+  }
+
+  @Put('/unfollow')
+  @UseGuards(AuthGuard('jwt'))
+  async unfollow(@Body() unfollowReq: UnfollowRequest) {
+    await this.userService.unfollow(unfollowReq);
+  }
+
+  @Get('/get-following')
+  @UseGuards(AuthGuard('jwt'))
+  getUserFollowing(@Query() paginationQueryDto: PaginationQueryDto) {
+    return this.userService.getFollowing(paginationQueryDto);
+  }
+
+  @Get('/get-followers')
+  @UseGuards(AuthGuard('jwt'))
+  getUserFollowers(@Query() paginationQueryDto: PaginationQueryDto) {
+    return this.userService.getFollowers(paginationQueryDto);
+  }
+
+  @Get('/my-profile')
+  @UseGuards(AuthGuard('jwt'))
+  async getUserProfile(@Request() req) {
+    return await this.userService.getUserInfo(req.user);
   }
 }

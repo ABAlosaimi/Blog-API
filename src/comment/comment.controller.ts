@@ -18,8 +18,8 @@ export class CommentController {
   @Post('/new-comment')
   create(
     @Body() createCommentDto: CreateCommentDto,
-    @Body() userId: number,
-    @Body() articleId: number,
+    @Body('userId') userId: number,
+    @Body('articleId') articleId: number,
   ) {
     return this.commentService.create(userId, articleId, createCommentDto);
   }

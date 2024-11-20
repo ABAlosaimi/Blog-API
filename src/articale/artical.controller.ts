@@ -9,11 +9,14 @@ import {
   HttpStatus,
   HttpCode,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ArticalService } from './artical.service';
 import { CreateArticalDto } from './dto/create-artical.dto';
 import { UpdateArticalDto } from './dto/update-artical.dto';
 import { PaginationQueryDto } from 'pagination/pagination';
+import { Public } from 'src/decorators/public.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('/artical')
 export class ArticalController {
@@ -22,6 +25,7 @@ export class ArticalController {
   // creating new article just for registerd users
   @Post('/new-artical/userName/:userName')
   @HttpCode(201)
+  @UseGuards(AuthGuard('jwt'))
   async create(
     @Body() createArticalDto: CreateArticalDto,
     @Param('userName') userName: string,
@@ -29,11 +33,14 @@ export class ArticalController {
     return await this.articalService.addNewArtical(userName, createArticalDto);
   }
   // return a list of articles for non-registed guests
+  @Public()
   @HttpCode(200)
   @Get('/all')
   async findAll(@Query() query: PaginationQueryDto) {
     return await this.articalService.getArticals(query);
   }
+
+  @Public()
   @HttpCode(200)
   @Get('/:id')
   async getArticle(@Param('id') id: string) {
