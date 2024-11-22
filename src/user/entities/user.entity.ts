@@ -4,6 +4,7 @@ import {
   Column,
   Entity,
   Index,
+  //Index,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -13,29 +14,30 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   userName: string;
 
-  @Column({ nullable: true })
-  @Index()
+  @Column({ nullable: false })
+  //@Index()
   firstName: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   lastName: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   @IsEmail()
+  @Index()
   email: string;
 
-  @Column()
+  @Column({ nullable: false })
   @Min(6)
   @Max(12)
   password: string;
 
-  @Column({ nullable: true })
+  @Column({ default: 0 })
   follow: number;
 
-  @Column({ nullable: true })
+  @Column({ default: 0 })
   followers: number;
 
   @OneToMany(() => Artical, (atical) => atical.user, {

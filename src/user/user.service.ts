@@ -10,17 +10,15 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { RegisterRequestDto } from 'src/auth/dto/Register-Request.dto copy';
 import { Follow } from './entities/Follow.entity';
-import { Followers } from './entities/Followers.entity';
 import { FollowingResponse } from './dto/follow-response.dto';
 import { PaginationQueryDto } from 'pagination/pagination';
 import { UnfollowRequest } from './dto/unfollow-request.dto';
-
+import { faker } from '@faker-js/faker';
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private uesrRepository: Repository<User>,
     @InjectRepository(Follow) private followRepo: Repository<Follow>,
-    @InjectRepository(Followers) private followersRepo: Repository<Followers>,
   ) {}
   // used to save the account after its pass being hashed in AuthService.register
   async addNewAcc(registerReqDto: RegisterRequestDto): Promise<void> {
@@ -45,15 +43,15 @@ export class UserService {
     }
   }
 
-  async getUserInfo(user: User) {
+  async getUserInfo(userId: number) {
     return await this.uesrRepository.findOne({
-      where: { id: user.id },
+      where: { id: userId },
       relations: { articals: true },
     });
   }
 
   async getUserByEmail(email: string) {
-    return await this.uesrRepository.findOne({ where: { email: email } });
+    return await this.uesrRepository.findOneBy({ email: email });
   }
 
   async update(userName: string, updateUserDto: UpdateUserDto) {
@@ -96,26 +94,17 @@ export class UserService {
     await this.uesrRepository.increment({ id: followedId }, 'followers', 1);
     this.followRepo.save(newFollowing);
 
-    const newFollower = await this.followersRepo.create({
-      followerid: follower.id,
-      followedid: followed.id,
-    });
-
-    this.followersRepo.save(newFollower);
-
     return { massege: `you have follow ${followed.firstName} successfuly` };
   }
-
-  async unfollow(unfollowReq: UnfollowRequest) {
+  // unfollow a followed user
+  async unfollow(unfolloeReq: UnfollowRequest) {
     await this.followRepo.delete({
-      followedId: unfollowReq.followedId,
-      followerId: unfollowReq.followerId,
+      followedId: unfolloeReq.followedId,
+      followerId: unfolloeReq.followerId,
     });
-
-    await this.followersRepo.delete({
-      followedid: unfollowReq.followedId,
-      followerid: unfollowReq.followerId,
-    });
+    // decrement the denormalized column in  the users table
+    await this.uesrRepository.decrement({id: unfolloeReq.followedId}, 'followers', 1);
+    await this.uesrRepository.decrement({id: unfolloeReq.followerId}, 'following', 1);
   }
 
   //  async follower(followedId: number, followerId: number) {
@@ -137,9 +126,10 @@ export class UserService {
   //   return { massege: `you have new follower:${followedUser.firstName}` };
   // }
 
-  async getFollowing(query: PaginationQueryDto) {
+  async getFollowing(query: PaginationQueryDto, userId: number) {
     const { page, limit = 10 } = query;
     const [items, count] = await this.followRepo.findAndCount({
+      where: { followerId: userId },
       take: limit,
       skip: (page - 1) * limit,
     });
@@ -152,9 +142,10 @@ export class UserService {
     };
   }
 
-  async getFollowers(query: PaginationQueryDto) {
+  async getFollowers(query: PaginationQueryDto, userId: number) {
     const { page, limit = 10 } = query;
-    const [items, count] = await this.followersRepo.findAndCount({
+    const [items, count] = await this.followRepo.findAndCount({
+      where: { followedId: userId },
       take: limit,
       skip: (page - 1) * limit,
     });
@@ -165,5 +156,46 @@ export class UserService {
       page,
       limit,
     };
+  }
+
+  async fillUsers() {
+    const chunkSize = 1_000;
+    const totalUsers = 1_000_000;
+    const users = [];
+
+    for (let i = 0; i < totalUsers; i++) {
+      const randomUserName = faker.internet.username();
+      const randomEmail = faker.internet.email();
+      const randompass = faker.internet.password();
+      const randomFirstname = faker.person.firstName();
+      const randomLastName = faker.person.lastName();
+
+      users.push({
+        userName: randomUserName,
+        email: randomEmail,
+        password: randompass,
+        firstName: randomFirstname,
+        lastName: randomLastName,
+        follow: 0,
+        followers: 0,
+      });
+
+      // console.log(users);
+
+      // Insert in chunks
+      if (users.length === chunkSize) {
+        console.log('Inserting chunk Number:', i / chunkSize);
+        console.log('Percentage done:', (i / totalUsers) * 100 + '%');
+        await this.uesrRepository.insert(users);
+        users.length = 0; // clear the array
+      }
+    }
+
+    // Insert any remaining users
+    if (users.length > 0) {
+      await this.uesrRepository.insert(users);
+    }
+
+    return 'done';
   }
 }

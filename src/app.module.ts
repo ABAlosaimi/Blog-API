@@ -5,19 +5,20 @@ import { ArticalModule } from './articale/artical.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { env } from 'process';
 import { CommentModule } from './comment/comment.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     ArticalModule,
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '',
-      database: 'Blog-db',
+      type: process.env.DB_TYPE,
+      host: process.env.HOST,
+      port: process.env.DB_PORT,
+      username: process.env.USERNAME,
+      password: process.env.PASSWORD,
+      database: process.env.DATABASE,
       autoLoadEntities: true,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,

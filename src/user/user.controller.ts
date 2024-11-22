@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import {
   Controller,
   Get,
@@ -8,7 +9,6 @@ import {
   Delete,
   UseGuards,
   HttpCode,
-  Request,
   Put,
   Query,
 } from '@nestjs/common';
@@ -22,16 +22,22 @@ import { UnfollowRequest } from './dto/unfollow-request.dto';
 @Public()
 @Controller('/user')
 export class UserController {
+  dataSource: any;
   constructor(private userService: UserService) {}
 
   @HttpCode(201)
   @UseGuards(AuthGuard('jwt'))
-  @Patch('/update/')
+  @Patch('/update')
   update(
     @Body('userName') userName: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.userService.update(userName, updateUserDto);
+  }
+
+  @Get('/getuser')
+  async getuser(@Body('email') email: string) {
+    return await this.userService.getUserByEmail(email);
   }
 
   @HttpCode(204)
@@ -55,26 +61,37 @@ export class UserController {
   }
 
   @Put('/unfollow')
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
   async unfollow(@Body() unfollowReq: UnfollowRequest) {
     await this.userService.unfollow(unfollowReq);
   }
 
   @Get('/get-following')
-  @UseGuards(AuthGuard('jwt'))
-  getUserFollowing(@Query() paginationQueryDto: PaginationQueryDto) {
-    return this.userService.getFollowing(paginationQueryDto);
+  //@UseGuards(AuthGuard('jwt'))
+  getUserFollowing(
+    @Query() paginationQueryDto: PaginationQueryDto,
+    @Body('userId') userId: number,
+  ) {
+    return this.userService.getFollowing(paginationQueryDto, userId);
   }
 
   @Get('/get-followers')
   @UseGuards(AuthGuard('jwt'))
-  getUserFollowers(@Query() paginationQueryDto: PaginationQueryDto) {
-    return this.userService.getFollowers(paginationQueryDto);
+  getUserFollowers(
+    @Query() paginationQueryDto: PaginationQueryDto,
+    @Body('userId') userId: number,
+  ) {
+    return this.userService.getFollowers(paginationQueryDto, userId);
   }
 
   @Get('/my-profile')
-  @UseGuards(AuthGuard('jwt'))
-  async getUserProfile(@Request() req) {
-    return await this.userService.getUserInfo(req.user);
+  // @UseGuards(AuthGuard('jwt'))
+  async getUserProfile(@Body('userId') userId: number) {
+    return await this.userService.getUserInfo(userId);
+  }
+
+  @Post('/fillUsers')
+  async fillUsers() {
+    return await this.userService.fillUsers();
   }
 }

@@ -12,8 +12,10 @@ import { AuthController } from './auth.controller';
     UserModule,
     JwtModule.register({
       global: true,
-      secret: 'fdvndf34',
-      signOptions: { expiresIn: '3600s' },
+      secret: process.env.JWT_SECRET,
+      signOptions: {
+        expiresIn: process.env.ACCESS_TOKEN_VALIDITY_DURATION_IN_SEC,
+      },
     }),
   ],
   providers: [AuthService, JwtStrategy],
