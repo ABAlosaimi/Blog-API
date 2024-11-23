@@ -42,9 +42,9 @@ export class ArticalController {
 
   @Public()
   @HttpCode(200)
-  @Get('/:id')
-  async getArticle(@Param('id') id: string) {
-    return await this.articalService.getArtical(+id);
+  @Get('/:title')
+  async getArticle(@Param('title') title: string) {
+    return await this.articalService.getArtical(title);
   }
 
   @HttpCode(201)

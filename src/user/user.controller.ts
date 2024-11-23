@@ -35,10 +35,10 @@ export class UserController {
     return this.userService.update(userName, updateUserDto);
   }
 
-  @Get('/getuser')
-  async getuser(@Body('email') email: string) {
-    return await this.userService.getUserByEmail(email);
-  }
+  // @Get('/getuser')
+  // async getuser(@Body('email') email: string) {
+  //   return await this.userService.getUserByEmail(email);
+  // }
 
   @HttpCode(204)
   @UseGuards(AuthGuard('jwt'))
@@ -47,7 +47,7 @@ export class UserController {
     return this.userService.remove(id);
   }
 
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   @Post('/follow')
   async follow(@Body() followRequest: FollowRequest) {
     // this.userService.follower(

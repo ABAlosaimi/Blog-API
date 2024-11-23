@@ -65,16 +65,13 @@ export class ArticalService {
     };
   }
 
-  async getArtical(id: number) {
-    const articale: Artical = await this.articalRepository.findOneBy({
-      id: id,
-    });
+  async getArtical(title: string) {
+    const articale = await this.articalRepository.findBy({ title: title });
 
     if (articale == null) {
       throw new NotFoundException('The artical you looking for is not exist');
     } else {
-      const res = await this.articalRepository.findOneBy({ id: id });
-      return res;
+      return articale;
     }
   }
 

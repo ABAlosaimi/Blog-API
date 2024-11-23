@@ -96,6 +96,7 @@ export class UserService {
 
     return { massege: `you have follow ${followed.firstName} successfuly` };
   }
+
   // unfollow a followed user
   async unfollow(unfolloeReq: UnfollowRequest) {
     await this.followRepo.delete({
@@ -103,28 +104,17 @@ export class UserService {
       followerId: unfolloeReq.followerId,
     });
     // decrement the denormalized column in  the users table
-    await this.uesrRepository.decrement({id: unfolloeReq.followedId}, 'followers', 1);
-    await this.uesrRepository.decrement({id: unfolloeReq.followerId}, 'following', 1);
+    await this.uesrRepository.decrement(
+      { id: unfolloeReq.followedId },
+      'followers',
+      1,
+    );
+    await this.uesrRepository.decrement(
+      { id: unfolloeReq.followerId },
+      'following',
+      1,
+    );
   }
-
-  //  async follower(followedId: number, followerId: number) {
-  //   const followedUser = await this.uesrRepository.findOneBy({
-  //     id: followedId,
-  //   });
-  //   const follower = await this.uesrRepository.findOneBy({
-  //     id: followerId,
-  //   });
-  //   const newFollower = this.followersRepo.create({
-  //     followerid: follower.id,
-  //     followedid: followedUser.id,
-  //   });
-
-  //   followedUser.followers++;
-  //   follower.follow++;
-  //   this.followersRepo.save(newFollower);
-
-  //   return { massege: `you have new follower:${followedUser.firstName}` };
-  // }
 
   async getFollowing(query: PaginationQueryDto, userId: number) {
     const { page, limit = 10 } = query;
@@ -186,7 +176,7 @@ export class UserService {
       if (users.length === chunkSize) {
         console.log('Inserting chunk Number:', i / chunkSize);
         console.log('Percentage done:', (i / totalUsers) * 100 + '%');
-        await this.uesrRepository.insert(users);
+        await this.uesrRepository.save(users);
         users.length = 0; // clear the array
       }
     }

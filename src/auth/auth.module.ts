@@ -12,9 +12,9 @@ import { AuthController } from './auth.controller';
     UserModule,
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET,
+      secret: 'bgvgvg',
       signOptions: {
-        expiresIn: process.env.ACCESS_TOKEN_VALIDITY_DURATION_IN_SEC,
+        expiresIn: '3600s',
       },
     }),
   ],
