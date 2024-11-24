@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Artical } from 'src/articale/entities/artical.entity';
 import { Comment } from './entities/comment.entity';
+import { PaginationQueryDto } from 'pagination/pagination';
 
 @Injectable()
 export class CommentService {
@@ -52,9 +53,37 @@ export class CommentService {
 
     return this.commentRepo.save(newComment);
   }
+  // get the commints on one article by paginate it
+  async getArticleCommints(articleId: number, query: PaginationQueryDto) {
+    const articale = await this.articleRepo.findOneBy({ id: articleId });
+
+    if (!articale) {
+      throw new NotFoundException(
+        'the article is not published any more or being deleted ',
+      );
+    }
+
+    const { page, limit = 10 } = query;
+    const [items, count] = await this.commentRepo.findAndCount({
+      where: { article: articale },
+      take: limit,
+      skip: (page - 1) * limit,
+    });
+
+    return {
+      items,
+      total: count,
+      page,
+      limit,
+    };
+  }
 
   async findOne(id: number) {
-    return await this.commentRepo.findOneBy({ id: id });
+    const isExist = await this.commentRepo.findOneBy({ id: id });
+    if (!isExist) {
+      throw new NotFoundException('the commint you looking for may deleted');
+    }
+    return isExist;
   }
 
   async update(id: number, updateCommentDto: UpdateCommentDto) {

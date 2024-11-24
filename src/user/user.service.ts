@@ -25,7 +25,7 @@ export class UserService {
     await this.uesrRepository.save(registerReqDto);
   }
 
-  // used by auth.service in registration process to check if the user exist befor or not
+  // used by auth.service in registration process to check if the user exist befor or not, by the email AND userName to verify there won't be any Duplication
   async getUser(email: string, userName: string) {
     const findedByEmail = await this.uesrRepository.findOne({
       where: { email: email },
@@ -46,7 +46,7 @@ export class UserService {
   async getUserInfo(userId: number) {
     return await this.uesrRepository.findOne({
       where: { id: userId },
-      relations: { articals: true },
+      relations: { articals: true, comments: true, likes: true },
     });
   }
 
@@ -76,6 +76,10 @@ export class UserService {
     const follower = await this.uesrRepository.findOneBy({ id: followerid });
     const followed = await this.uesrRepository.findOneBy({ id: followedId });
 
+    if (!followed) {
+      throw new NotAcceptableException();
+    }
+
     // check if the followed user is already followed before
     const isfollowed = await this.followRepo.findOne({
       where: { followerId: follower.id, followedId: followed.id },
@@ -99,18 +103,26 @@ export class UserService {
 
   // unfollow a followed user
   async unfollow(unfolloeReq: UnfollowRequest) {
+    const isFollowedUserActive = await this.uesrRepository.findOneBy({
+      id: unfolloeReq.followedid,
+    });
+
+    if (!isFollowedUserActive) {
+      throw new NotAcceptableException();
+    }
+
     await this.followRepo.delete({
-      followedId: unfolloeReq.followedId,
-      followerId: unfolloeReq.followerId,
+      followedId: unfolloeReq.followedid,
+      followerId: unfolloeReq.followerid,
     });
     // decrement the denormalized column in  the users table
     await this.uesrRepository.decrement(
-      { id: unfolloeReq.followedId },
+      { id: unfolloeReq.followedid },
       'followers',
       1,
     );
     await this.uesrRepository.decrement(
-      { id: unfolloeReq.followerId },
+      { id: unfolloeReq.followerid },
       'following',
       1,
     );
@@ -147,7 +159,7 @@ export class UserService {
       limit,
     };
   }
-
+  // not important, it here just to fill the DB with random users to test out the query performence
   async fillUsers() {
     const chunkSize = 1_000;
     const totalUsers = 1_000_000;

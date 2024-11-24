@@ -4,12 +4,12 @@ import { IsEmail, IsEmpty } from 'class-validator';
 
 export class UpdateUserDto extends PartialType(addNewAccDto) {
   @IsEmpty({ message: 'Your first name shloud not be blank' })
-  firstName: string;
+  firstName?: string;
   @IsEmpty({ message: 'Your last name shloud not be blank' })
-  lastName: string;
+  lastName?: string;
   @IsEmpty({ message: 'Your email should not be blank' })
   @IsEmail()
-  email: string;
+  email?: string;
   @IsEmpty()
-  password: string;
+  password?: string;
 }

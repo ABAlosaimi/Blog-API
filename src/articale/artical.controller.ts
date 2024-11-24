@@ -19,13 +19,13 @@ import { Public } from 'src/decorators/public.decorator';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('/artical')
+@UseGuards(AuthGuard('jwt'))
 export class ArticalController {
   constructor(private readonly articalService: ArticalService) {}
 
   // creating new article just for registerd users
   @Post('/new-artical/userName/:userName')
   @HttpCode(201)
-  @UseGuards(AuthGuard('jwt'))
   async create(
     @Body() createArticalDto: CreateArticalDto,
     @Param('userName') userName: string,

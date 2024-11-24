@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateLikeDto } from './dto/create-like.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like } from './entities/like.entity';
@@ -24,6 +28,8 @@ export class LikesService {
 
     if (!article) {
       throw new BadRequestException();
+    } else if (!user) {
+      throw new UnauthorizedException();
     }
 
     await this.articleRepo.increment(
