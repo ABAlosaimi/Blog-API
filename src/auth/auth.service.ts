@@ -15,7 +15,10 @@ export class AuthService {
   ) {}
 
   //used for registred user when thier wnat to login in existing account in the database
-  async validateUser(email: string, password: string): Promise<LoginResponseDTO | BadRequestException> {
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<LoginResponseDTO | BadRequestException> {
     const user: User = await this.userService.getUserByEmail(email);
     if (!user) {
       throw new BadRequestException('The password or email isn`t right');

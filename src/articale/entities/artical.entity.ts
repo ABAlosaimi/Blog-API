@@ -23,7 +23,7 @@ export class Artical {
   @Column({ default: 0 })
   like: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.articals)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;
 
