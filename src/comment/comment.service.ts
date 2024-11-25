@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Artical } from 'src/articale/entities/artical.entity';
+import { Comment } from './entities/comment.entity';
 
 @Injectable()
 export class CommentService {
@@ -50,7 +51,7 @@ export class CommentService {
       article: article,
     });
 
-    return this.commentRepo.save(newComment);
+    return await this.commentRepo.save(newComment);
   }
 
   async findOne(id: number) {

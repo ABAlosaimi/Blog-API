@@ -1,7 +1,14 @@
-import { User } from 'src/user/entities/user.entity';
-import { Artical } from 'src/articale/entities/artical.entity';
-import { Column, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '../../user/entities/user.entity';
+import { Artical } from '../../articale/entities/artical.entity';
+import {
+  Column,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Entity,
+} from 'typeorm';
 
+@Entity()
 export class Comment {
   @PrimaryGeneratedColumn()
   id: number;

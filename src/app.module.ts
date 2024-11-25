@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { env } from 'process';
+// import { env } from 'process';
 import { CommentModule } from './comment/comment.module';
 
 @Module({
@@ -14,14 +14,14 @@ import { CommentModule } from './comment/comment.module';
     ArticalModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: env.HOST,
-      port: env.APP_PORT,
-      username: env.USERNAME,
-      password: env.PASSWORD,
-      database: env.DATABASE,
+      host: 'localhost',
+      port: 5432,
+      username: 'abdo',
+      password: 'abdo123',
+      database: 'test_db',
       autoLoadEntities: true,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: false,
       logging: false,
     }),
     UserModule,

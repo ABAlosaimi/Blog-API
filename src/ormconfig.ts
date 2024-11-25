@@ -1,21 +1,23 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { User } from './user/entities/user.entity';
+import { Artical } from './articale/entities/artical.entity';
+import { Comment } from './comment/entities/comment.entity';
 import * as dotenv from 'dotenv';
+
 dotenv.config();
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
   host: 'localhost',
   port: 5432,
-  username: 'postgres',
-  password: '',
-  database: 'Blog-db',
-  entities: [__dirname + 'src/**/*.entity{.ts,.js}'],
-  synchronize: false, // todo: not safe for production and we should use migrations instead
-  subscribers: [__dirname + '/domain/subscribers/*.subscriber{.ts,.js}'],
-  migrations: [__dirname + '/migrations/*{.ts,.js}'],
+  username: 'abdo',
+  password: 'abdo123',
+  database: 'test_db',
+  entities: [User, Artical, Comment],
+  migrations: ['./migration/*.ts'],
+  migrationsTableName: 'migrations',
+  synchronize: false,
 };
 
 const dataSource = new DataSource(dataSourceOptions);
-dataSource.initialize();
-
 export default dataSource;

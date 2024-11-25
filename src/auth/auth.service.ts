@@ -2,24 +2,26 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/user/entities/user.entity';
-import { UserService } from 'src/user/user.service';
-import { AccessToken } from './types/AccessToken.js';
-import { RegisterRequestDto } from './dto/Register-Request.dto copy.js';
+import { AccessToken } from './types/AccessToken';
+import { RegisterRequestDto } from './dto/Register-Request.dto copy';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     private jwtService: JwtService,
   ) {}
 
   //used for registred user when thier wnat to login in existing account in the database
   async validateUser(email: string, password: string): Promise<User> {
-    const user: User = await this.userService.getUserByEmail(email);
+    const user = await this.userRepository.findOne({ where: { email } });
     if (!user) {
       throw new BadRequestException('The password or email isn`t right');
     }
-    const isMatch: boolean = bcrypt.compareSync(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       throw new BadRequestException('The password or email not right');
     }
@@ -34,13 +36,18 @@ export class AuthService {
 
   // used in sign in (new account in userService) but befor registration it hashing the account's password, to be saved then in the database
   async register(user: RegisterRequestDto): Promise<AccessToken> {
-    const existingUser = await this.userService.getUserByEmail(user.email);
+    const existingUser = await this.userRepository.findOne({
+      where: { email: user.email },
+    });
     if (existingUser) {
       throw new BadRequestException('the email is already used');
     }
     const hashedPassword = await bcrypt.hash(user.password, 10);
-    const newUser = { ...user, password: hashedPassword };
-    await this.userService.addNewAcc(newUser);
+    const newUser = this.userRepository.create({
+      ...user,
+      password: hashedPassword,
+    });
+    await this.userRepository.save(newUser);
     return this.login(newUser);
   }
 }
