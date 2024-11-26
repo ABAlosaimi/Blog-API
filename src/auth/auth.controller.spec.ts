@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
+import { HttpCode } from '@nestjs/common';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -13,6 +14,6 @@ describe('AuthController', () => {
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(controller.login).toBe(HttpCode(200));
   });
 });

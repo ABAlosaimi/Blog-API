@@ -128,10 +128,11 @@ export class UserService {
     );
   }
 
-  async getFollowing(query: PaginationQueryDto, userId: number) {
+  async getFollowing(query: PaginationQueryDto, userName: string) {
+    const user = await this.uesrRepository.findOneBy({ userName: userName });
     const { page, limit = 10 } = query;
     const [items, count] = await this.followRepo.findAndCount({
-      where: { followerId: userId },
+      where: { followerId: user.id },
       take: limit,
       skip: (page - 1) * limit,
     });
@@ -144,10 +145,11 @@ export class UserService {
     };
   }
 
-  async getFollowers(query: PaginationQueryDto, userId: number) {
+  async getFollowers(query: PaginationQueryDto, userName: string) {
+    const user = await this.uesrRepository.findOneBy({ userName: userName });
     const { page, limit = 10 } = query;
     const [items, count] = await this.followRepo.findAndCount({
-      where: { followedId: userId },
+      where: { followedId: user.id },
       take: limit,
       skip: (page - 1) * limit,
     });
@@ -162,7 +164,7 @@ export class UserService {
   // not important, it here just to fill the DB with random users to test out the query performence
   async fillUsers() {
     const chunkSize = 1_000;
-    const totalUsers = 1_000_000;
+    const totalUsers = 10_000;
     const users = [];
 
     for (let i = 0; i < totalUsers; i++) {

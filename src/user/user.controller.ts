@@ -70,22 +70,22 @@ export class UserController {
   //@UseGuards(AuthGuard('jwt'))
   getUserFollowing(
     @Query() paginationQueryDto: PaginationQueryDto,
-    @Body('userId') userId: number,
+    @Body('userName') userName: string,
   ) {
-    return this.userService.getFollowing(paginationQueryDto, userId);
+    return this.userService.getFollowing(paginationQueryDto, userName);
   }
 
   @Get('/get-followers')
   @UseGuards(AuthGuard('jwt'))
   getUserFollowers(
     @Query() paginationQueryDto: PaginationQueryDto,
-    @Body('userId') userId: number,
+    @Body('userName') userName: string,
   ) {
-    return this.userService.getFollowers(paginationQueryDto, userId);
+    return this.userService.getFollowers(paginationQueryDto, userName);
   }
 
   @Get('/my-profile')
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   async getUserProfile(@Body('userId') userId: number) {
     return await this.userService.getUserInfo(userId);
   }

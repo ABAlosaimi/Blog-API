@@ -11,7 +11,7 @@ export class Follow {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(() => User)
+  @ManyToMany(() => User, (user) => user.follow)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   followerId: number;
 
