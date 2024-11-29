@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build":"node node_modules/@nestjs/cli/bin/nest.js build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^9.2.0",
-    "@nestjs/cli": "^10.0.0",
+    "@nestjs/cli": "^10.4.8",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.4.9",
     "@nestjs/typeorm": "^10.0.2",
