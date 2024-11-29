@@ -8,11 +8,11 @@ dotenv.config();
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  host: 'localhost',
+  host: 'dpg-ct4t7lo8fa8c73br5isg-a',
   port: 5432,
-  username: 'postgres',
-  password: '',
-  database: 'Blog-db',
+  username: 'blog_db_staging_user',
+  password: 'Var9ReeMW6MWz7NjgczY4DSqJrFhLOsv',
+  database: 'blog_db_staging',
   entities: [User, Like, Comment, Artical],
   synchronize: false, // todo: not safe for production and we should use migrations instead
   subscribers: ['/domain/subscribers/*.subscriber{.ts,.js}'],
@@ -20,6 +20,6 @@ export const dataSourceOptions: DataSourceOptions = {
 };
 
 const dataSource = new DataSource(dataSourceOptions);
-// dataSource.initialize();
+ dataSource.initialize();
 
 export default dataSource;

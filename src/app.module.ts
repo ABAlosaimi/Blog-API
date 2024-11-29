@@ -8,6 +8,9 @@ import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
 import { ConfigModule } from '@nestjs/config';
 import { LikesModule } from './likes/likes.module';
+import * as dotenv from 'dotenv'
+
+dotenv.config({ path: '../masar-blog/development.env'});
 
 @Module({
   imports: [
