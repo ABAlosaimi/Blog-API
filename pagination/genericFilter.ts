@@ -1,22 +1,22 @@
-import { IsNumber } from 'class-validator';
-import { IsOptional } from 'class-validator';
-import { IsEnum } from 'class-validator';
-import { Type } from 'class-transformer';
-import { SortOrder } from './sortOrder';
+// import { IsNumber } from 'class-validator';
+// import { IsOptional } from 'class-validator';
+// import { IsEnum } from 'class-validator';
+// import { Type } from 'class-transformer';
+// import { SortOrder } from './sortOrder';
 
-export class GenericFilter {
-  @Type(() => Number)
-  @IsNumber({}, { message: ' "page" atrribute should be a number' })
-  public page: number;
+// export class GenericFilter {
+//   @Type(() => Number)
+//   @IsNumber({}, { message: ' "page" atrribute should be a number' })
+//   public page: number;
 
-  @Type(() => Number)
-  @IsNumber({}, { message: ' "pageSize" attribute should be a number ' })
-  public pageSize: number;
+//   @Type(() => Number)
+//   @IsNumber({}, { message: ' "pageSize" attribute should be a number ' })
+//   public pageSize: number;
 
-  @IsOptional()
-  public orderBy?: string;
+//   @IsOptional()
+//   public orderBy?: string;
 
-  @IsEnum(SortOrder)
-  @IsOptional()
-  public sortOrder?: SortOrder = SortOrder.DESC;
-}
+//   @IsEnum(SortOrder)
+//   @IsOptional()
+//   public sortOrder?: SortOrder = SortOrder.DESC;
+// }
