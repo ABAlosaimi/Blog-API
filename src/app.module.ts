@@ -21,7 +21,7 @@ import { LikesModule } from './likes/likes.module';
       password: '',
       database: 'Blog-db',
       autoLoadEntities: true,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: ['/**/*.entity{.ts,.js}'],
       synchronize: false,
       logging: true,
     }),
