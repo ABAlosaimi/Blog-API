@@ -4,13 +4,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { AuthController } from './auth.controller';
-import { User } from 'src/user/entities/user.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
     ConfigModule,
-    TypeOrmModule.forFeature([User]),
+    UserModule,
     JwtModule.register({
       global: true,
       secret: 'bgvgvg',
