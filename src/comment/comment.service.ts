@@ -51,7 +51,7 @@ export class CommentService {
       article: article,
     });
 
-    return this.commentRepo.save(newComment);
+    return await this.commentRepo.save(newComment);
   }
   // get the commints on one article by paginate it
   async getArticleCommints(articleId: number, query: PaginationQueryDto) {

@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
+import { BadRequestException } from '@nestjs/common';
 
 describe('UserService', () => {
   let service: UserService;
@@ -12,7 +13,9 @@ describe('UserService', () => {
     service = module.get<UserService>(UserService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  fit('should returen 200 code', () => {
+    expect(service.getUser('bhbdvfd@gmail.com', 'refn34')).toBe(
+      BadRequestException,
+    );
   });
 });

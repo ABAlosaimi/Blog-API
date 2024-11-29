@@ -6,9 +6,13 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from 'src/user/entities/user.entity';
-import { Comment } from 'src/comment/entities/comment.entity';
-import { Like } from 'src/likes/entities/like.entity';
+// import { User } from 'src/user/entities/user.entity';
+// import { Comment } from 'src/comment/entities/comment.entity';
+// import { Like } from 'src/likes/entities/like.entity';
+import { User } from '../../user/entities/user.entity';
+import { Comment } from '../../comment/entities/comment.entity';
+import { Like } from '../../likes/entities/like.entity';
+
 @Entity('Articals')
 export class Artical {
   @PrimaryGeneratedColumn()

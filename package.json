@@ -16,13 +16,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
-    "migration:generate": "npm run typeorm -- migration:generate -d src/ormconfig.ts migration/",
-    "migration:add": "npm run typeorm -- migration:create",
-    "migration:up": "npm run typeorm -- migration:run",
-    "migration:down": "npm run typeorm -- migration:revert",
-    "migration:drop-schema": "npm run typeorm schema:drop",
+    "typeorm": "typeorm-ts-node-commonjs",
     "migration:create": "npm run typeorm migration:create ./migration/initial",
+    "migration:generate": "npm run typeorm -- migration:generate -d ormconfig.ts migration/initial",
+    "migration:run": "npm run typeorm -- migration:run -d src/ormconfig.ts",
+    "migration:revert": "npm run typeorm -- migration:revert -d src/ormconfig.ts",
     "start:dev": "NODE_ENV=development nest start --watch",
     "start:prod": "NODE_ENV=production node dist/main"
   },
@@ -49,7 +47,7 @@
     "@faker-js/faker": "^9.2.0",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
-    "@nestjs/testing": "^10.4.8",
+    "@nestjs/testing": "^10.4.9",
     "@nestjs/typeorm": "^10.0.2",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.2",
@@ -77,8 +75,8 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "rootDir": "masar-blog",
+    "testRegex": ".*/*.spec.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },

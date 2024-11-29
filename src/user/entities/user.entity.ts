@@ -1,5 +1,5 @@
 import { IsEmail, Max, Min } from 'class-validator';
-import { Artical } from 'src/articale/entities/artical.entity';
+import { Artical } from '../../articale/entities/artical.entity';
 import {
   Column,
   Entity,
@@ -8,8 +8,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Comment } from 'src/comment/entities/comment.entity';
-import { Like } from 'src/likes/entities/like.entity';
+import { Comment } from '../../comment/entities/comment.entity';
+import { Like } from '../../likes/entities/like.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()

@@ -15,7 +15,7 @@ import { LikesModule } from './likes/likes.module';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.HOST,
+      host: 'localhost',
       port: 5432,
       username: 'postgres',
       password: '',
