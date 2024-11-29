@@ -1,6 +1,6 @@
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { GenericFilter } from './genericFilter';
-import { SortOrder } from './sortOrder';
+import { SortOrder } from '../pagination/sortOrder';
 
 export class PageService {
   protected createOrderQuery(filter: GenericFilter) {
