@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build":"node node_modules/@nestjs/cli/bin/nest.js build",
+    "build": "node node_modules/@nestjs/cli/bin/nest.js build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
@@ -75,7 +75,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "masar-blog",
+    "rootDir": "/masar-blog",
     "testRegex": ".*/*.spec.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"

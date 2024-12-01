@@ -8,9 +8,10 @@ import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
 import { ConfigModule } from '@nestjs/config';
 import { LikesModule } from './likes/likes.module';
-import * as dotenv from 'dotenv'
+import * as dotenv from 'dotenv';
 
-dotenv.config({ path: '../masar-blog/development.env'});
+dotenv.config({ path: '/masar-blog/development.env' });
+console.log(process.env.DB_TYPE);
 
 @Module({
   imports: [
@@ -18,13 +19,13 @@ dotenv.config({ path: '../masar-blog/development.env'});
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'dpg-ct4t7lo8fa8c73br5isg-a',
-      port: 5432,
-      username: 'blog_db_staging_user',
-      password: 'Var9ReeMW6MWz7NjgczY4DSqJrFhLOsv',
-      database: 'blog_db_staging',
-      autoLoadEntities: false,
-      entities: ['/**/*.entity{.ts,.js}'],
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      autoLoadEntities: true,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
       logging: true,
     }),
