@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 import {
   Controller,
   Get,
@@ -35,10 +34,10 @@ export class UserController {
     return this.userService.update(userName, updateUserDto);
   }
 
-  @Get('/getuser')
-  async getuser(@Body('email') email: string) {
-    return await this.userService.getUserByEmail(email);
-  }
+  // @Get('/getuser')
+  // async getuser(@Body('email') email: string) {
+  //   return await this.userService.getUserByEmail(email);
+  // }
 
   @HttpCode(204)
   @UseGuards(AuthGuard('jwt'))
@@ -61,13 +60,13 @@ export class UserController {
   }
 
   @Put('/unfollow')
-  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   async unfollow(@Body() unfollowReq: UnfollowRequest) {
     await this.userService.unfollow(unfollowReq);
   }
 
   @Get('/get-following')
-  //@UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   getUserFollowing(
     @Query() paginationQueryDto: PaginationQueryDto,
     @Body('userName') userName: string,
@@ -85,7 +84,7 @@ export class UserController {
   }
 
   @Get('/my-profile')
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   async getUserProfile(@Query('userId') userId: number) {
     return await this.userService.getUserInfo(userId);
   }
