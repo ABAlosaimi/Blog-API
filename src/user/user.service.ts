@@ -13,7 +13,7 @@ import { Follow } from './entities/Follow.entity';
 import { FollowingResponse } from './dto/follow-response.dto';
 import { PaginationQueryDto } from 'pagination/pagination';
 import { UnfollowRequest } from './dto/unfollow-request.dto';
-import { faker } from '@faker-js/faker';
+//import { faker } from '@faker-js/faker';
 @Injectable()
 export class UserService {
   constructor(
@@ -115,7 +115,7 @@ export class UserService {
       followedId: unfolloeReq.followedid,
       followerId: unfolloeReq.followerid,
     });
-    // decrement the denormalized column in  the users table
+    // decrement the denormalized column in the users table
     await this.uesrRepository.decrement(
       { id: unfolloeReq.followedid },
       'followers',
@@ -126,6 +126,8 @@ export class UserService {
       'following',
       1,
     );
+
+    return 'Unfollowed successfully';
   }
 
   async getFollowing(query: PaginationQueryDto, userName: string) {
@@ -161,45 +163,46 @@ export class UserService {
       limit,
     };
   }
-  // not important, it here just to fill the DB with random users to test out the query performence
-  async fillUsers() {
-    const chunkSize = 1_000;
-    const totalUsers = 10_000;
-    const users = [];
+  //   // not important, it here just to fill the DB with random users to test out the query performence
+  //   async fillUsers() {
+  //     const chunkSize = 1_000;
+  //     const totalUsers = 10_000;
+  //     const users = [];
 
-    for (let i = 0; i < totalUsers; i++) {
-      const randomUserName = faker.internet.username();
-      const randomEmail = faker.internet.email();
-      const randompass = faker.internet.password();
-      const randomFirstname = faker.person.firstName();
-      const randomLastName = faker.person.lastName();
+  //     for (let i = 0; i < totalUsers; i++) {
+  //       const randomUserName = faker.internet.username();
+  //       const randomEmail = faker.internet.email();
+  //       const randompass = faker.internet.password();
+  //       const randomFirstname = faker.person.firstName();
+  //       const randomLastName = faker.person.lastName();
 
-      users.push({
-        userName: randomUserName,
-        email: randomEmail,
-        password: randompass,
-        firstName: randomFirstname,
-        lastName: randomLastName,
-        follow: 0,
-        followers: 0,
-      });
+  //       users.push({
+  //         userName: randomUserName,
+  //         email: randomEmail,
+  //         password: randompass,
+  //         firstName: randomFirstname,
+  //         lastName: randomLastName,
+  //         follow: 0,
+  //         followers: 0,
+  //       });
 
-      // console.log(users);
+  //       // console.log(users);
 
-      // Insert in chunks
-      if (users.length === chunkSize) {
-        console.log('Inserting chunk Number:', i / chunkSize);
-        console.log('Percentage done:', (i / totalUsers) * 100 + '%');
-        await this.uesrRepository.save(users);
-        users.length = 0; // clear the array
-      }
-    }
+  //       // Insert in chunks
+  //       if (users.length === chunkSize) {
+  //         console.log('Inserting chunk Number:', i / chunkSize);
+  //         console.log('Percentage done:', (i / totalUsers) * 100 + '%');
+  //         await this.uesrRepository.save(users);
+  //         users.length = 0; // clear the array
+  //       }
+  //     }
 
-    // Insert any remaining users
-    if (users.length > 0) {
-      await this.uesrRepository.insert(users);
-    }
+  //     // Insert any remaining users
+  //     if (users.length > 0) {
+  //       await this.uesrRepository.insert(users);
+  //     }
 
-    return 'done';
-  }
+  //     return 'done';
+  //   }
+  // }
 }
