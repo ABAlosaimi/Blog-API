@@ -4,11 +4,11 @@ dotenv.config();
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT),
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: 'postgresql://blog_db_staging_user:Var9ReeMW6MWz7NjgczY4DSqJrFhLOsv@dpg-ct4t7lo8fa8c73br5isg-a.singapore-postgres.render.com/blog_db_staging',
+  port: 5432,
+  username: 'blog_db_staging_user',
+  password: 'Var9ReeMW6MWz7NjgczY4DSqJrFhLOsv',
+  database: 'blog_db_staging',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   synchronize: false, // todo: not safe for production and we should use migrations instead
   subscribers: [__dirname + '/domain/subscribers/*.subscriber{.ts,.js}'],

@@ -20,12 +20,13 @@ export class UserService {
     @InjectRepository(User) private uesrRepository: Repository<User>,
     @InjectRepository(Follow) private followRepo: Repository<Follow>,
   ) {}
+
   // used to save the account after its pass being hashed in AuthService.register
   async addNewAcc(registerReqDto: RegisterRequestDto): Promise<void> {
     await this.uesrRepository.save(registerReqDto);
   }
 
-  // used by auth.service in registration process to check if the user exist befor or not, by the email AND userName to verify there won't be any Duplication
+  // used by auth.service in registration process to check if the email or username exist befor or not, by the email AND userName to verify there won't be any Duplication
   async getUser(email: string, userName: string) {
     const findedByEmail = await this.uesrRepository.findOne({
       where: { email: email },
@@ -89,6 +90,7 @@ export class UserService {
     if (isfollowed) {
       throw new NotAcceptableException();
     }
+
     const newFollowing = await this.followRepo.create({
       followerId: follower.id,
       followedId: followed.id,
